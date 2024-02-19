@@ -4,13 +4,18 @@ from helper import matrix_rater, matrix_category
 
 
 # TEST
-rater_1_path= "/Users/miltonlin/Documents/GitHub/CSS-HW2/data/Milton.csv"
+rater_1_path= "data/Milton.csv"
 rater_1_name = "Milton"
 matrix_1 = matrix_rater(rater_1_path, rater_1_name) 
 
-rater_2_path = "/Users/miltonlin/Documents/GitHub/CSS-HW2/data/Lois.csv"
+rater_2_path = "data/Lois.csv"
 rater_2_name = "Lois" 
 matrix_2 = matrix_rater(rater_2_path, rater_2_name) 
+
+rater_3_path = "data/cole.csv"
+rater_3_name = "Cole" 
+matrix_3 = matrix_rater(rater_3_path, rater_3_name) 
+
 
 def fleiss_kappa(matrix_list, category):
     # Assuming matrix_category function correctly filters matrices by category
@@ -46,7 +51,7 @@ def fleiss_kappa(matrix_list, category):
 
     
 #TEST 
-matrix_list = [matrix_1, matrix_2]
+matrix_list = [matrix_1, matrix_2, matrix_3]
 #create a list of categories and loop over them
 categories = ["tone", "expertise", "encouraging", "respectful"] 
 for category in categories:
