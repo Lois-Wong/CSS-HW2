@@ -1,76 +1,55 @@
 import pandas as pd
 import numpy as np
+from helper import matrix_rater, matrix_category 
 
-"""we first create a matrix for each rater, where the rows are the 40 comments and the columns are the 12 categories
-we have 5 tones, 3 expertise, 2 encouraging, 2 respectful 
-the 5 tones are Strongly Negative, Negative, Neutral, Positive, Strongly Positive
-the three expertise are No Degree, STEM Degree, Non-STEM Degree
-the two encouraging are Discouraging, Encouraging
-the two respectful are Disrespectful, Respectful """
-
-
-
-
-def matrix_rater(path_of_rater, rater):
-    """INPUT: path_of_rater: the path of the csv file of the rater , name of rater, rater 
-    OUTPUT: matrix: a 40x12 matrix filled with zeros, where the rows are the 40 comments and the columns are the 12 categories"""
-    
-    # Read the CSV file; pandas automatically skips the header
-    data = pd.read_csv(path_of_rater)
-    # Create a 40x12 matrix filled with zeros
-    matrix = np.zeros((40, 12))
-    # Iterate over rows of the dataset
-    for i, row in data.iterrows():
-        # Ensure we do not go beyond the first 40 entries
-        if i >= 40:
-            break
-        
-        #we have 5 tones, 3 expertise, 2 encouraging, 2 respectful 
-        # the 5 tones are Strongly Negative, Negative, Neutral, Positive, Strongly Positive
-        tone = row['tone']
-        if tone == "Strongly Negative":
-            matrix[i][0] += 1
-        elif tone == "Negative":
-            matrix[i][1] += 1
-        elif tone == "Neutral":
-            matrix[i][2] += 1  
-        elif tone == "Positive":
-            matrix[i][3] += 1
-        elif tone == "Strongly Positive":
-            matrix[i][4] += 1
-        
-        
-        expertise = row['expertise']
-        if expertise == "No Degree":
-            matrix[i][5] += 1
-        elif expertise == "STEM Degree":
-            matrix[i][6] += 1
-        elif expertise == "Non-STEM Degree":
-            matrix[i][7] += 1
-        
-        encouraging = row['encouraging']
-        if encouraging == "Discouraging":
-            matrix[i][8] += 1
-        elif encouraging == "Encouraging":
-            matrix[i][9] += 1
-        
-        respectful = row['respectful']
-        if respectful == "Disrespectful":
-            matrix[i][10] += 1
-        elif respectful == "Respectful":
-            matrix[i][11] += 1
-    
-    # Notification that the matrix creation is complete
-    print("The matrix for rater " + rater + " is created")
-    #see the first few rows 
-    print("The first few rows of the matrix looks like this: ") 
-    print(matrix[:5]) 
-    return matrix
 
 # TEST
-rater_1_path= "/Users/miltonlin/Documents/GitHub/CSS-HW2/Milton.csv"
+rater_1_path= "/Users/miltonlin/Documents/GitHub/CSS-HW2/data/Milton.csv"
 rater_1_name = "Milton"
 matrix_1 = matrix_rater(rater_1_path, rater_1_name) 
-rater_2_path = "/Users/miltonlin/Documents/GitHub/CSS-HW2/Lois.csv"
+
+rater_2_path = "/Users/miltonlin/Documents/GitHub/CSS-HW2/data/Lois.csv"
 rater_2_name = "Lois" 
 matrix_2 = matrix_rater(rater_2_path, rater_2_name) 
+
+def fleiss_kappa(matrix_list, category):
+    # Assuming matrix_category function correctly filters matrices by category
+    #create a new matrix list
+    new_matrix_list = [0] * len(matrix_list)
+    for i in range(len(matrix_list)):
+        new_matrix_list[i] = matrix_category(matrix_list[i], category)
+    
+    # Sum matrices entry by entry
+    sum_matrix = np.sum(np.array(new_matrix_list), axis=0)
+    
+    # print("The sum matrix looks like this:")    
+    # print(sum_matrix[:5])
+    
+    n = len(matrix_list)  # Number of raters
+    N = sum_matrix.shape[0]  # Number of subjects
+    k = sum_matrix.shape[1]  # Number of categories
+    
+    little_p = np.sum(sum_matrix, axis=0) / (N*n)  # Proportion of all ratings for each category
+    
+    # Calculate P_i for each item
+    P= (np.sum(sum_matrix * (sum_matrix - 1), axis=1) / (n * (n - 1))).mean()
+    #note that * is pointwise multiplication, and .mean() is the mean of the resulting array 
+    
+    # Calculate P_e (expected agreement by chance)
+    P_c = np.sum(little_p ** 2)
+    
+    # Compute Fleiss' Kappa
+    kappa = (P - P_c) / (1 - P_c)
+    
+    print(f"Fleiss' Kappa: {kappa}")
+    return kappa
+
+    
+#TEST 
+matrix_list = [matrix_1, matrix_2]
+#create a list of categories and loop over them
+categories = ["tone", "expertise", "encouraging", "respectful"] 
+for category in categories:
+    print(f"Category: {category}")
+    fleiss_kappa(matrix_list, category)
+
