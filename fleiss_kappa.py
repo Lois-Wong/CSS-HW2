@@ -33,14 +33,14 @@ def fleiss_kappa(matrix_list, category):
     n = len(matrix_list)  # Number of raters
     N = sum_matrix.shape[0]  # Number of subjects
     k = sum_matrix.shape[1]  # Number of categories
-    
+    # Calculate "little p"  in wiki 
     little_p = np.sum(sum_matrix, axis=0) / (N*n)  # Proportion of all ratings for each category
     
-    # Calculate P_i for each item
+     # Calculate big P in wikipedea, denoted P or each item
     P= (np.sum(sum_matrix * (sum_matrix - 1), axis=1) / (n * (n - 1))).mean()
     #note that * is pointwise multiplication, and .mean() is the mean of the resulting array 
     
-    # Calculate P_e (expected agreement by chance)
+    # Calculate P_c (expected agreement by chance)
     P_c = np.sum(little_p ** 2)
     
     # Compute Fleiss' Kappa
