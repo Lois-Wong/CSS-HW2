@@ -45,10 +45,10 @@ def export_csv(annotations_path, save_path):
         exporting = []
         for annot in loaded_annotations['annots']:
             example = {
-                "gender": annot['gender'],
+                # "gender": annot['gender'],
                 "comment": annot['comment'],
-                "talkid": annot['talkid'],
-                "videourl": annot['videourl']
+                # "talkid": annot['talkid'],
+                # "videourl": annot['videourl']
             }
             if "annotation" in annot:
                 annotations = annot['annotation']
