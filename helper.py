@@ -85,3 +85,59 @@ def matrix_category(matrix, category):
         print("Invalid category")
         return None
     return new_matrix
+
+# below is the code for matrix for each rater for the NEW annotation scheme
+
+# in this new annotation scheme we have 
+# 4 categoreis: tone, expertise, encouraging, respectful
+# each category has 3 subcategories for comparison 
+# Response 1, Response 2, They are equally positive
+def matrix_rater_new(path_of_rater, rater):
+    data = pd.read_csv(path_of_rater)
+    matrix = np.zeros((40, 12))  # 40 comments, 12 categories (3 tones, 3 expertise, 3 encouraging, 3 respectful)
+    
+    for i, row in data.iterrows():
+        if i >= 40:
+            break
+        
+        tone = row['tone']
+        expertise = row['expertise']
+        encouraging = row['encouraging']
+        respectful = row['respectful']
+        
+        # Tone
+        if tone == "Response 1": matrix[i][0] += 1
+        elif tone == "Response 2": matrix[i][1] += 1
+        elif tone == "They are equally positive": matrix[i][2] += 1
+        
+        # Expertise
+        if expertise == "Response 1": matrix[i][3] += 1
+        elif expertise == "Response 2": matrix[i][4] += 1
+        elif expertise == "They are equally positive": matrix[i][5] += 1
+        
+        # Encouraging
+        if encouraging == "Response 1": matrix[i][6] += 1
+        elif encouraging == "Response 2": matrix[i][7] += 1
+        elif encouraging == "They are equally positive": matrix[i][8] += 1
+        
+        # Respectful 
+        if respectful == "Response 1": matrix[i][9] += 1
+        elif respectful == "Response 2": matrix[i][10] += 1
+        elif respectful == "They are equally positive": matrix[i][11] += 1
+    
+    return matrix
+
+def matrix_category_new(matrix, category):
+    if category == "tone":
+        new_matrix = matrix[:, :3]  
+    elif category == "expertise":
+        new_matrix = matrix[:, 3:6] 
+    elif category == "encouraging":
+        new_matrix = matrix[:, 6:9]  
+    elif category == "respectful":
+        new_matrix = matrix[:, 9:12]  
+    else:
+        print("Invalid category")
+        return None
+    return new_matrix
+
