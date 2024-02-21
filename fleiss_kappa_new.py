@@ -9,9 +9,9 @@ rater_1_name = "Milton"
 matrix_1 = matrix_rater_new(rater_1_path, rater_1_name) 
 print(matrix_1)
 
-# rater_2_path = "data/Lois2.csv"
-# rater_2_name = "Lois" 
-# matrix_2 = matrix_rater_new(rater_2_path, rater_2_name) 
+rater_2_path = "data/Lois2.csv"
+rater_2_name = "Lois" 
+matrix_2 = matrix_rater_new(rater_2_path, rater_2_name) 
 
 rater_3_path = "data/Cole2.csv"
 rater_3_name = "Cole" 
@@ -52,7 +52,7 @@ def fleiss_kappa(matrix_list, category):
 
     
 #TEST 
-matrix_list = [matrix_1, matrix_3]
+matrix_list = [matrix_1, matrix_2]
 #create a list of categories and loop over them
 categories = ["tone", "expertise", "encouraging", "respectful"] 
 for category in categories:
