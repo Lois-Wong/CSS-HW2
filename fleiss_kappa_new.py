@@ -52,10 +52,24 @@ def fleiss_kappa(matrix_list, category):
 
     
 #TEST 
-matrix_list = [matrix_1, matrix_2]
+matrix_list_123 = [matrix_1, matrix_2, matrix_3]
+# we also conssider lists of two matrices from matrix_lsit_123
+# we do a for loop to select two matrices from matrix_list_123 and construct matrix_list_ij for ij in 12 13 23 
+matrix_list_12 = [matrix_1, matrix_2]
+matrix_list_13 = [matrix_1, matrix_3]
+matrix_list_23 = [matrix_2, matrix_3]
+# we now combine all possible matrices into a list
+matrix_combination = [matrix_list_123, matrix_list_12, matrix_list_13, matrix_list_23] 
+    
 #create a list of categories and loop over them
 categories = ["tone", "expertise", "encouraging", "respectful"] 
-for category in categories:
-    print(f"Category: {category}")
-    fleiss_kappa(matrix_list, category)
+a = 1 # to keep track of the matrix_list
+for matrix_list in matrix_combination:
+        # print(f"Matrix list: {matrix_list}")
+    
+    print("This matrix is in the " + str(a) + "th position in the matrix_combination list")
+    for category in categories:
+        print(f"Category: {category}")
+        fleiss_kappa(matrix_list, category)
+    a += 1
 
